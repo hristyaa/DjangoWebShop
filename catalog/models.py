@@ -67,3 +67,16 @@ class Product(models.Model):
             "name",
             "price",
         ]
+
+class Contact(models.Model):
+    name = models.CharField(max_length=150, verbose_name="Наименование организации")
+    email = models.CharField(max_length=100, verbose_name="Электронная почта")
+    phone = models.CharField(max_length=20, verbose_name='Телефон')
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "контакт"
+        verbose_name_plural = "контакты"
+        ordering = ["name",]
