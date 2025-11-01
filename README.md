@@ -19,6 +19,9 @@ poetry install
 ```
 poetry add django 
 poetry add dotenv 
+poetry add psycopg2-binary
+poetry add pillow
+poetry add ipython
 ```
 
 ### Настройка базы данных
