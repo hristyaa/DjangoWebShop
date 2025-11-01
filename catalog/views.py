@@ -23,3 +23,7 @@ def contacts(request):
 
         return HttpResponse(f'Спасибо, {name}! Сообщение: "{message}" получено.')
     return render(request, 'catalog/contacts.html', context)
+
+
+def index(request):
+    return render(request, 'catalog/base.html')
