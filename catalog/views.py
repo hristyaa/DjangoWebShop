@@ -1,15 +1,17 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
-from catalog.models import Product, Contact
+from catalog.models import Product, Contact, Category
 
 
 def home(request):
+    products = Product.objects.all()
+    context = {'products': products}
     latest_products = Product.objects.all().order_by('-created_at')[:5]
     print("Последние 5 созданных продуктов:")
     for product in latest_products:
         print(f'{product.name} - {product.price} руб.')
-    return render(request, 'catalog/home.html')
+    return render(request, 'catalog/home.html', context)
 
 
 def contacts(request):
@@ -25,11 +27,14 @@ def contacts(request):
     return render(request, 'catalog/contacts.html', context)
 
 
-# def index(request):
-#     return render(request, 'catalog/base.html')
-
-
 def products_list(request):
     products = Product.objects.all()
     context = {'products': products}
     return render(request, 'catalog/products_list.html', context)
+
+
+
+def products_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    context = {'product': product}
+    return render(request, 'catalog/products_detail.html', context)

@@ -1,26 +1,41 @@
 
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom box-shadow navbar" style="background-color: #e3f2fd;" data-bs-theme="light">
+    <nav>
+    <h4 class="my-0 mr-md-auto font-weight-normal">ТехноМания</h4>
+    <h5 class="lead">интернет-магазин</h5>
+    </nav>
+    <nav class="ms-5">
+        <a class="p-2 btn btn-outline-primary active" href="{% url 'catalog:products_list' %}">Главная</a>
+<!--        <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:products_list' %}">Каталог</a>-->
+        <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:contacts' %}">Контакты</a>
+    </nav>
+</div>
 
-<div class="collapse text-bg-dark" id="navbarHeader">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8 col-md-7 py-4"><h4>ТехноМания</h4>
-                    <p class="text-body-secondary">Интернет-магазин</p></div>
-                <div class="col-sm-4 offset-md-1 py-4">
-                    <ul class="list-unstyled">
-                        <li><a href="{% url 'catalog:home' %}" class="text-white">Главная</a></li>
-                        <li><a href="{% url 'catalog:products_list' %}" class="text-white">Каталог</a></li>
-                        <li><a href="{% url 'catalog:contacts' %}" class="text-white">Контакты</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="navbar navbar-dark bg-dark shadow-sm">
-        <div class="container">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
-                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"><span
-                    class="navbar-toggler-icon"></span></button>
-        </div>
-    </div>
+
+<!--<div class="collapse text-bg-dark" id="navbarHeader">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="col-sm-8 col-md-7 py-4"><h4>ТехноМания</h4>-->
+<!--                    <p class="text-body-secondary">Интернет-магазин</p></div>-->
+<!--                <div class="col-sm-4 offset-md-1 py-4">-->
+<!--                    <ul class="list-unstyled">-->
+<!--                        <li><a href="{% url 'catalog:home' %}" class="text-white">Главная</a></li>-->
+<!--                        <li><a href="{% url 'catalog:products_list' %}" class="text-white">Каталог</a></li>-->
+<!--                        <li><a href="{% url 'catalog:contacts' %}" class="text-white">Контакты</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+
+<!--    <div class="navbar navbar-dark bg-dark shadow-sm">-->
+<!--        <div class="container">-->
+<!--            <a href="#" class="navbar-brand d-flex align-items-center">-->
+<!--            </a>-->
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"-->
+<!--                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"><span-->
+<!--                    class="navbar-toggler-icon"></span></button>-->
+<!--        </div>-->
+<!--    </div>-->

@@ -164,25 +164,44 @@
     {% include 'includes/inc_menu.html' %}
 </header>
 <main>
+    {% block page_header %}
     <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">ТехноМания</h1>
-                <p class="lead text-body-secondary">Интернет-магазин</p>
-                <p><a href="#" class="btn btn-primary my-2">Main call to action</a> <a href="#"
-                                                                                       class="btn btn-secondary my-2">Secondary
-                    action</a></p></div>
+        <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <h1 class="display-4">ТехноМания</h1>
+            <p class="lead">В нашем интернет-магазине вы можете найти товары на все случаи жизни по выгодным ценам.</p>
         </div>
     </section>
-
+    {% endblock %}
     {% block content %}
     {% endblock %}
 
 </main>
-<footer class="text-body-secondary py-5">
-    <div class="container"><p class="float-end mb-1"><a href="#">Back to top</a></p>
-        <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-        <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a
-                href="/docs/5.3/getting-started/introduction">getting started guide</a>.</p></div>
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-12 col-md">
+                ТехноМания
+                <small class="d-block mb-3 text-muted">&copy; 2025</small>
+            </div>
+            <div class="col-6 col-md">
+                <h5>Категории</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Смартфоны</a></li>
+                    <li><a class="text-muted" href="#">Телевизоры</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md">
+                <h5>Дополнительно</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Мы пишем</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md">
+                <h5>О нас</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="{% url 'catalog:contacts' %}">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
 </footer>
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>
