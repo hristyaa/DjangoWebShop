@@ -12,7 +12,7 @@ app_name = CatalogConfig.name
 urlpatterns = [
     path('home/', views.home, name='home'),
     path('contacts/', views.contacts, name='contacts'),
-    path('index/', views.index, name='index'),
+    path('products_list/', views.products_list, name='products_list'),
 ]
 
 if settings.DEBUG:
