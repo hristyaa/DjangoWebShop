@@ -15,10 +15,19 @@
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p class="card-text ">{{ post.content }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
+                            <div class="btn-group-vertical">
                                 <a class="btn btn-primary" href="{% url 'blog:posts_list' %}" role="button">Вернуться
                                     в блог</a>
-
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        Редактировать
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'blog:post_update' post.pk %}" role="button">Изменить</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'blog:post_delete' post.pk %}"role="button">Удалить</a></li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="text-muted">
                                 <small class="text-body-secondary d-block">Cоздан: {{ post.created_at|date:"d M Y" }}</small>
