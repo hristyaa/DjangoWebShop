@@ -18,4 +18,13 @@ class BlogPostDetailView(DetailView):
     template_name = 'blog/blogpost_detail.html'
     context_object_name = 'post'
 
+    def get_object(self, queryset=None):
+        self.post = super().get_object(queryset)
+        self.post.count_of_views += 1
+        self.post.save()
+        return self.post
+
+
+
+
 

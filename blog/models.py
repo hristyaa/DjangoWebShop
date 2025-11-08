@@ -9,7 +9,7 @@ class BlogPost(models.Model):
     preview = models.ImageField(upload_to="blog_images/", verbose_name="Превью", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     is_published = models.BooleanField(default=False, verbose_name="Признак публикации")
-    count_of_views = models.IntegerField(default=0, verbose_name="Количество просмотров")
+    count_of_views = models.PositiveIntegerField(default=0, verbose_name="Количество просмотров")
 
     def __str__(self):
         return f"{self.title} {self.created_at} {self.count_of_views}"
