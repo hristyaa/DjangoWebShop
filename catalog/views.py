@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.views.generic import ListView, DetailView, TemplateView
+# from django.shortcuts import get_object_or_404, render
+from django.views.generic import DetailView, ListView, TemplateView
 
 from catalog.models import Contact, Product
 
@@ -15,7 +15,7 @@ class ProductDetailView(DetailView):
 
 class ContactsTemplateView(TemplateView):
     model = Contact
-    template_name = 'catalog/contacts.html'
+    template_name = "catalog/contacts.html"
 
     def post(self, *args, **kwargs):
         if self.request.method == "POST":
