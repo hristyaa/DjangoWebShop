@@ -1,38 +1,58 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView, DetailView, TemplateView
 
 from catalog.models import Contact, Product
 
 
-def home(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    latest_products = Product.objects.all().order_by("-created_at")[:5]
-    print("Последние 5 созданных продуктов:")
-    for product in latest_products:
-        print(f"{product.name} - {product.price} руб.")
-    return render(request, "catalog/home.html", context)
+class ProductListView(ListView):
+    model = Product
 
 
-def contacts(request):
-    data = Contact.objects.all()
-    context = {"contacts": data}
-
-    if request.method == "POST":
-        name = request.POST.get("name")
-        message = request.POST.get("message")
-
-        return HttpResponse(f'Спасибо, {name}! Сообщение: "{message}" получено.')
-    return render(request, "catalog/contacts.html", context)
+class ProductDetailView(DetailView):
+    model = Product
 
 
-def products_list(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    return render(request, "catalog/products_list.html", context)
+class ContactsTemplateView(TemplateView):
+    model = Contact
+    template_name = 'catalog/contacts.html'
+
+    def post(self, *args, **kwargs):
+        if self.request.method == "POST":
+            name = self.request.POST.get("name")
+            message = self.request.POST.get("message")
+            return HttpResponse(f'Спасибо, {name}! Сообщение: "{message}" получено.')
 
 
-def products_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {"product": product}
-    return render(request, "catalog/products_detail.html", context)
+# def home(request):
+#     products = Product.objects.all()
+#     context = {"products": products}
+#     latest_products = Product.objects.all().order_by("-created_at")[:5]
+#     print("Последние 5 созданных продуктов:")
+#     for product in latest_products:
+#         print(f"{product.name} - {product.price} руб.")
+#     return render(request, "catalog/home.html", context)
+#
+#
+# def contacts(request):
+#     data = Contact.objects.all()
+#     context = {"contacts": data}
+#
+#     if request.method == "POST":
+#         name = request.POST.get("name")
+#         message = request.POST.get("message")
+#
+#         return HttpResponse(f'Спасибо, {name}! Сообщение: "{message}" получено.')
+#     return render(request, "catalog/contacts.html", context)
+#
+#
+# def products_list(request):
+#     products = Product.objects.all()
+#     context = {"products": products}
+#     return render(request, "catalog/products_list.html", context)
+#
+#
+# def products_detail(request, pk):
+#     product = get_object_or_404(Product, pk=pk)
+#     context = {"product": product}
+#     return render(request, "catalog/product_detail.html", context)
