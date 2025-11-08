@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.urls import include, path
 
 from blog.apps import BlogConfig
-from blog.views import BlogPostListView, BlogPostDetailView, BlogPostCreateView, BlogPostUpdateView
+from blog.views import BlogPostListView, BlogPostDetailView, BlogPostCreateView, BlogPostUpdateView, BlogPostDeleteView
 
 # from . import views
 
@@ -15,7 +15,7 @@ urlpatterns = [
     path("posts/<int:pk>/", BlogPostDetailView.as_view(), name="post_detail"),
     path("posts/create/", BlogPostCreateView.as_view(), name="post_create"),
     path("posts/update/<int:pk>/", BlogPostUpdateView.as_view(), name="post_update"),
-    # path("contacts/", ContactsTemplateView.as_view(), name="contacts"),
+    path("posts/delete/<int:pk>/", BlogPostDeleteView.as_view(), name="post_delete"),
 ]
 
 if settings.DEBUG:
