@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.urls import include, path
 
 from blog.apps import BlogConfig
-from blog.views import BlogPostsListView
+from blog.views import BlogPostListView, BlogPostDetailView
 
 # from . import views
 
@@ -11,8 +11,8 @@ from blog.views import BlogPostsListView
 app_name = BlogConfig.name
 
 urlpatterns = [
-    path("blog/", BlogPostsListView.as_view(), name="posts_list"),
-    # path("products/<int:pk>/", ProductDetailView.as_view(), name="products_detail"),
+    path("posts/", BlogPostListView.as_view(), name="posts_list"),
+    path("posts/<int:pk>/", BlogPostDetailView.as_view(), name="post_detail"),
     # path("contacts/", ContactsTemplateView.as_view(), name="contacts"),
 ]
 
