@@ -10,3 +10,14 @@ class BlogPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     is_published = models.BooleanField(default=False, verbose_name="Признак публикации")
     count_of_views = models.IntegerField(default=0, verbose_name="Количество просмотров")
+
+    def __str__(self):
+        return f"{self.title} {self.created_at} {self.count_of_views}"
+
+    class Meta:
+        verbose_name = "пост"
+        verbose_name_plural = "посты"
+        ordering = [
+            "title",
+            "created_at",
+        ]
