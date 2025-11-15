@@ -41,6 +41,12 @@ class ProductForm(ModelForm):
             }
         )
 
+        self.fields['is_available'].widget.attrs.update(
+            {
+                'class': 'form-check-input'
+            }
+        )
+
     def clean_name(self):
         """Валидация названия (отсутствие запрещенных слов)"""
         name = self.cleaned_data.get('name')
@@ -64,9 +70,17 @@ class ProductForm(ModelForm):
     def clean_price(self):
         """Валидация цены (цена продукта не может быть отрицательной)"""
         price = self.cleaned_data.get('price')
-        if price<0:
+        if price < 0:
             raise ValidationError('Цена продукта не может быть отрицательной')
         return price
+
+
+    # def clean_image(self):
+    #     """Валидация цены (цена продукта не может быть отрицательной)"""
+    #     price = self.cleaned_data.get('price')
+    #     if price<0:
+    #         raise ValidationError('Цена продукта не может быть отрицательной')
+    #     return price
 
 
 

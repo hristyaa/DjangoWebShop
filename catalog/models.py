@@ -24,6 +24,8 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
 
+    is_available = models.BooleanField(default=True, verbose_name="В наличии")
+
     def __str__(self):
         return f"{self.name} {self.description} {self.price}"
 
