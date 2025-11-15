@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
+
 class ProductForm(ModelForm):
     class Meta:
         model = Product
@@ -74,18 +75,12 @@ class ProductForm(ModelForm):
             raise ValidationError('Цена продукта не может быть отрицательной')
         return price
 
-
-    # def clean_image(self):
-    #     """Валидация цены (цена продукта не может быть отрицательной)"""
-    #     price = self.cleaned_data.get('price')
-    #     if price<0:
-    #         raise ValidationError('Цена продукта не может быть отрицательной')
-    #     return price
-
-
-
-
-
-
-
-
+    def clean_image(self):
+        """Валидация изображения (загружаемые файлы имеют формат JPEG или PNG и не превышают размер 5 МБ)"""
+        image = self.cleaned_data.get('image')
+        if image:
+            if image.content_type not in ['image/jpeg', 'image/png']:
+                raise ValidationError('Формат изображения должен быть JPEG или PNG.')
+            if image.size > 5 * 1024 * 1024:
+                raise ValidationError('Размер изображения не должен превышать 5 МБ.')
+        return image
