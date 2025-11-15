@@ -1,7 +1,9 @@
 from django.forms import ModelForm
 
 from catalog.models import Product
+from django.core.exceptions import ValidationError
 
+WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
 class ProductForm(ModelForm):
     class Meta:
@@ -39,27 +41,37 @@ class ProductForm(ModelForm):
             }
         )
 
-    def clean(self):
-        cleaned_data = super().clean()
-        name = cleaned_data.get('name')
-        description = cleaned_data.get('description')
-        words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+    def clean_name(self):
+        """Валидация названия (отсутствие запрещенных слов)"""
+        name = self.cleaned_data.get('name')
         if name:
-            for word in words:
+            for word in WORDS:
                 if f' {word} ' in f' {name.lower()} ':
-                    self.add_error('name',
-                           '''Наименование содержит запрещенные слова: 
-казино, криптовалюта, крипта, биржа,дешево,бесплатно,обман,полиция,радар.''')
-                    break
+                    raise ValidationError('''Наименование содержит запрещенные слова
+(казино, криптовалюта, крипта, биржа, дешево, бесплатно, обман, полиция, радар).''')
+        return name
 
+    def clean_description(self):
+        """Валидация описания (отсутствие запрещенных слов)"""
+        description = self.cleaned_data.get('description')
         if description:
-            for word in words:
+            for word in WORDS:
                 if f' {word} ' in f' {description.lower()} ':
-                    self.add_error('description',
-                                       '''Наименование содержит запрещенные слова: 
-            казино, криптовалюта, крипта, биржа,дешево,бесплатно,обман,полиция,радар.''')
-                    break
+                    raise ValidationError('''Описание содержит запрещенные слова 
+(казино, криптовалюта, крипта, биржа, дешево, бесплатно, обман, полиция, радар).''')
+        return description
 
-        return cleaned_data
+    def clean_price(self):
+        """Валидация цены (цена продукта не может быть отрицательной)"""
+        price = self.cleaned_data.get('price')
+        if price<0:
+            raise ValidationError('Цена продукта не может быть отрицательной')
+        return price
+
+
+
+
+
+
 
 
