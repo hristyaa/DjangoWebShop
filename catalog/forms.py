@@ -9,7 +9,7 @@ WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ['is_published',]
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -43,12 +43,6 @@ class ProductForm(ModelForm):
         )
 
         self.fields['is_available'].widget.attrs.update(
-            {
-                'class': 'form-check-input'
-            }
-        )
-
-        self.fields['is_published'].widget.attrs.update(
             {
                 'class': 'form-check-input'
             }
@@ -90,3 +84,9 @@ class ProductForm(ModelForm):
             if image.size > 5 * 1024 * 1024:
                 raise ValidationError('Размер изображения не должен превышать 5 МБ.')
         return image
+
+
+class ProductModeratorForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ("is_published",)

@@ -1,11 +1,11 @@
-from django.http import HttpResponse
-# from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from catalog.forms import ProductForm
+from catalog.forms import ProductForm, ProductModeratorForm
 from catalog.models import Contact, Product
 
 
@@ -27,6 +27,11 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_form_class(self):
+        user = self.request.user
+        if user.is_superuser or user.is_staff:
+            return ProductForm
+
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
@@ -37,6 +42,15 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+    def get_form_class(self):
+        user = self.request.user
+        if user.is_superuser or user.is_staff:
+            return ProductForm
+        elif user.has_perm('catalog.can_unpublish_product') and user.has_perm('catalog.delete_product'):
+            return ProductModeratorForm
+
+
 
 class ProductDeleteView(DeleteView):
     model = Product

@@ -37,6 +37,9 @@ class Product(models.Model):
             "name",
             "price",
         ]
+        permissions = [
+            ('can_unpublish_product', 'Can unpublish product'),
+        ]
 
 
 class Contact(models.Model):
