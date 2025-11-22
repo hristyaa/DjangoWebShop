@@ -9,7 +9,7 @@ WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        exclude = ['is_published',]
+        exclude = ['owner', 'is_published',]
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -47,6 +47,7 @@ class ProductForm(ModelForm):
                 'class': 'form-check-input'
             }
         )
+
 
     def clean_name(self):
         """Валидация названия (отсутствие запрещенных слов)"""
@@ -90,3 +91,9 @@ class ProductModeratorForm(ModelForm):
     class Meta:
         model = Product
         fields = ("is_published",)
+
+class ProductAdminForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+

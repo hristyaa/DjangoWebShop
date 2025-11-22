@@ -1,7 +1,7 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and not perms.catalog.can_unpublish_product or user.is_superuser%}
 <div class="text-center">
     <p>
         <a class="btn btn-primary" href="{% url 'catalog:product_create' %}" role="button">Добавить новый продукт</a>
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for product in object_list %}
-            {% if product.is_published and not perms.catalog.can_unpublish_product and not user.is_staff %}
+            {% if product.is_published and not perms.catalog.can_unpublish_product and not user.is_superuser %}
             <div class="col">
                 <div class="card shadow-sm">
                     <img src="{{ product.image | media_filter }}">
@@ -20,10 +20,25 @@
                         <p class="card-text">{{ product.category }}</p>
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+                        {% if user == product.owner %}
+                        <p class="card-text">Опубликован</p>
+                        {% endif %}
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group-vertical">
                                 <a class="btn btn-primary" href="{% url 'catalog:products_detail' product.pk %}"
                                    role="button">Посмотреть</a>
+                                {% if user == product.owner %}
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        Редактировать
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{% url 'catalog:product_update' product.pk %}" role="button">Изменить</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'catalog:product_delete' product.pk %}"role="button">Удалить</a></li>
+                                    </ul>
+                                </div>
+                            {% endif %}
                             </div>
                             <div class="text-muted">
                                 <small class="text-body-secondary d-block">Cоздан: {{ product.created_at|date:"d M Y" }}</small>
@@ -33,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            {% elif perms.catalog.can_unpublish_product or user.is_superuser %}
+            {% elif user == product.owner or perms.catalog.can_unpublish_product or user.is_superuser %}
             <div class="col">
                 <div class="card shadow-sm">
                     <img src="{{ product.image | media_filter }}">

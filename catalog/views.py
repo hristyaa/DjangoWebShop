@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView, TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from catalog.forms import ProductForm, ProductModeratorForm
+from catalog.forms import ProductForm, ProductModeratorForm, ProductAdminForm
 from catalog.models import Contact, Product
 
 
@@ -24,14 +24,17 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('catalog:products_list')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
     def get_form_class(self):
         user = self.request.user
-        if user.is_superuser or user.is_staff:
+        if user.is_superuser:
+            return ProductAdminForm
+        elif user.has_perm('catalog.can_unpublish_product'):
+            return ProductModeratorForm
+        else:
             return ProductForm
-
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
@@ -45,17 +48,39 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_form_class(self):
         user = self.request.user
-        if user.is_superuser or user.is_staff:
+        if user.is_superuser:
+            return ProductAdminForm
+        elif user == self.object.owner:
             return ProductForm
-        elif user.has_perm('catalog.can_unpublish_product') and user.has_perm('catalog.delete_product'):
+        elif user.has_perm('catalog.can_unpublish_product'):
             return ProductModeratorForm
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user = self.request.user
+
+        if not (user.is_superuser or user.has_perm('catalog.can_unpublish_product') or user == self.object.owner):
+            return HttpResponseForbidden('У вас нет прав на редактирование продукта.')
+
+        return super().post(request, *args, **kwargs)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:products_list')
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        user = self.request.user
+        is_moderator = user.groups.filter(name='Модератор продуктов').exists()
+
+        if not (product.owner == user or user.is_superuser or (user.has_perm('catalog.delete_product') and is_moderator)):
+            return HttpResponseForbidden('У вас нет прав на удаление продукта.')
+
+        product.delete()
+
+        return redirect('catalog:products_list')
 
 
 class ContactsTemplateView(TemplateView):
