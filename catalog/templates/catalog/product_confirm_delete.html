@@ -11,14 +11,29 @@
             <div class="col">
                 <form class="row" method="post" enctype="multipart/form-data">
                     <div class="card mx-auto">
-                        <p class="card-text text-center"> Вы действительно хотите удалить продукт "{{ object.name }}"?</p>
+                        <p class="card-text text-center"> Вы действительно хотите удалить продукт <strong>"{{ object.name }}"</strong>?</p>
+                        {% if user == object.owner %}
+                        <div class="alert alert-info text-center">
+                            <strong>Вы владелец</strong> этого продукта.
+                        </div>
+                        {% elif user.is_superuser %}
+                        <div class="alert alert-warning text-center">
+                            <strong>Внимание администратора!</strong> Вы удаляете продукт пользователя {{ object.owner }}.
+                        </div>
+                        {% elif perms.catalog.can_unpublish_product %}
+                        <div class="alert alert-warning text-center">
+                            <strong>Внимание модератора!</strong> Вы удаляете продукт пользователя {{ object.owner }}.
+                        </div>
+                        {% endif %}
                         <div class="card-body">
                             {% csrf_token %}
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <a class="btn btn-outline-success btn-sm" href="{% url 'catalog:products_detail' object.pk %}"
+                            <a class="btn btn-outline-success btn-sm"
+                               href="{% url 'catalog:products_detail' object.pk %}"
                                role="button">Посмотреть продукт</a>
-                            <a class="btn btn-outline-info btn-sm" href="{% url 'catalog:products_list' %}" role="button">Вернуться
+                            <a class="btn btn-outline-info btn-sm" href="{% url 'catalog:products_list' %}"
+                               role="button">Вернуться
                                 в каталог</a>
                             <button type="submit" class="btn btn-outline-danger btn-sm">
                                 Удалить

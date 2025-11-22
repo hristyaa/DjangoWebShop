@@ -9,7 +9,7 @@ WORDS = ['казино', 'криптовалюта', 'крипта', 'биржа
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ['owner', 'is_published',]
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -48,6 +48,7 @@ class ProductForm(ModelForm):
             }
         )
 
+
     def clean_name(self):
         """Валидация названия (отсутствие запрещенных слов)"""
         name = self.cleaned_data.get('name')
@@ -84,3 +85,15 @@ class ProductForm(ModelForm):
             if image.size > 5 * 1024 * 1024:
                 raise ValidationError('Размер изображения не должен превышать 5 МБ.')
         return image
+
+
+class ProductModeratorForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ("is_published",)
+
+class ProductAdminForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
