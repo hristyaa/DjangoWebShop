@@ -48,6 +48,12 @@ class ProductForm(ModelForm):
             }
         )
 
+        self.fields['is_published'].widget.attrs.update(
+            {
+                'class': 'form-check-input'
+            }
+        )
+
     def clean_name(self):
         """Валидация названия (отсутствие запрещенных слов)"""
         name = self.cleaned_data.get('name')
