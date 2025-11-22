@@ -1,3 +1,31 @@
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.contrib.auth import login
+from django.urls import reverse_lazy
+
+from django.views.generic import CreateView
+
+from users.forms import UserRegisterForm
+from users.models import CustomUser
+from config import settings
 
 # Create your views here.
+
+class UserCreateView(CreateView):
+    model = CustomUser
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('users:login')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        self.send_welcome_email(user.email)
+        return super().form_valid(form)
+
+    def send_welcome_email(self, user_email):
+        subject = 'Добро пожаловать в ТехноМанию!'
+        message = 'Спасибо, что зарегистрировались на нашем сервисе!'
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [user_email, ]
+        send_mail(subject, message, from_email, recipient_list)
+
+
