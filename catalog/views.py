@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 # from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
@@ -16,19 +17,26 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:products_list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:products_list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class ProductDeleteView(DeleteView):
     model = Product
@@ -45,7 +53,6 @@ class ContactsTemplateView(TemplateView):
             name = self.request.POST.get("name")
             message = self.request.POST.get("message")
             return HttpResponse(f'Спасибо, {name}! Сообщение: "{message}" получено.')
-
 
 # def home(request):
 #     products = Product.objects.all()
