@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
@@ -47,14 +48,18 @@ class BlogPostDetailView(DetailView):
         print(f"Письмо на email отправлен для статьи: {self.post.title}")
 
 
-class BlogPostCreateView(CreateView):
+class BlogPostCreateView(LoginRequiredMixin, CreateView):
     model = BlogPost
     fields = ['title', 'content', 'preview', 'is_published']
     template_name = 'blog/blogpost_form.html'
     success_url = reverse_lazy('blog:posts_list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-class BlogPostUpdateView(UpdateView):
+
+class BlogPostUpdateView(LoginRequiredMixin, UpdateView):
     model = BlogPost
     fields = ['title', 'content', 'preview', 'is_published']
     template_name = 'blog/blogpost_form.html'
@@ -62,6 +67,10 @@ class BlogPostUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('blog:post_detail', args=[self.kwargs.get('pk')])
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class BlogPostDeleteView(DeleteView):

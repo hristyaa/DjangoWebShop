@@ -1,5 +1,8 @@
 from django.db import models
 
+from users.models import CustomUser
+
+
 # Create your models here.
 
 
@@ -25,6 +28,9 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
 
     is_available = models.BooleanField(default=True, verbose_name="В наличии")
+    is_published = models.BooleanField(default=False, verbose_name="Опубликовать")
+
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Владелец', null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} {self.description} {self.price}"
@@ -35,6 +41,9 @@ class Product(models.Model):
         ordering = [
             "name",
             "price",
+        ]
+        permissions = [
+            ('can_unpublish_product', 'Can unpublish product'),
         ]
 
 
