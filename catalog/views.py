@@ -1,16 +1,35 @@
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DetailView, ListView, TemplateView, View
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from catalog.forms import ProductForm, ProductModeratorForm, ProductAdminForm
-from catalog.models import Contact, Product
+from catalog.models import Contact, Product, Category
+from catalog.services import get_products_from_cache, get_products_by_category
+
+
+class ProductCategoryListView(ListView):
+    model = Product
+    template_name = 'catalog/product_category_list.html'
+    context_object_name = 'product_category_list'
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        return get_products_by_category(category_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category_id'] = self.kwargs['category_id']
+        return context
 
 
 class ProductListView(ListView):
     model = Product
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 
 class ProductDetailView(DetailView):
@@ -35,6 +54,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             return ProductModeratorForm
         else:
             return ProductForm
+
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product

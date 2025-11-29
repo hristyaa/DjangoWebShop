@@ -8,6 +8,20 @@
     </p>
 </div>
 {% endif %}
+<div class="text-center">
+<div class="btn-group" role="group">
+    <button type="button" class="btn btn-secondary dropdown-toggle"
+            data-bs-toggle="dropdown" aria-expanded="false">
+        Фильтр по категории
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'catalog:products_category_list' category_id=1 %}" role="button">Смартфоны</a></li>
+        <li><a class="dropdown-item" href="{% url 'catalog:products_category_list' category_id=2 %}" role="button">Телевизоры</a></li>
+        <li><a class="dropdown-item" href="{% url 'catalog:products_list' %}" role="button">Все товары</a></li>
+    </ul>
+</div>
+</div>
+    {% block category_title %}{% endblock %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -34,11 +48,15 @@
                                         Редактировать
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'catalog:product_update' product.pk %}" role="button">Изменить</a></li>
-                                        <li><a class="dropdown-item" href="{% url 'catalog:product_delete' product.pk %}"role="button">Удалить</a></li>
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'catalog:product_update' product.pk %}" role="button">Изменить</a>
+                                        </li>
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'catalog:product_delete' product.pk %}" role="button">Удалить</a>
+                                        </li>
                                     </ul>
                                 </div>
-                            {% endif %}
+                                {% endif %}
                             </div>
                             <div class="text-muted">
                                 <small class="text-body-secondary d-block">Cоздан: {{ product.created_at|date:"d M Y" }}</small>
@@ -71,9 +89,11 @@
                                         Редактировать
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'catalog:product_update' product.pk %}"
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'catalog:product_update' product.pk %}"
                                                role="button">Изменить</a></li>
-                                        <li><a class="dropdown-item" href="{% url 'catalog:product_delete' product.pk %}"
+                                        <li><a class="dropdown-item"
+                                               href="{% url 'catalog:product_delete' product.pk %}"
                                                role="button">Удалить</a></li>
                                     </ul>
                                 </div>
