@@ -1,0 +1,9 @@
+{% extends 'catalog/product_list.html' %}
+{% load my_tags %}
+{% block category_title %}
+
+<h6 class="text-center fw-normal">Все товары категории:
+ {% if category_id == 1 %}"Смартфоны"
+{% elif category_id == 2 %}"Телевизоры"
+{% endif %}</h6>
+{% endblock %}

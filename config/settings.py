@@ -155,7 +155,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-CACHE_ENABLED = True
+CACHE_ENABLED = os.getenv('CACHE_ENABLED')
 if CACHE_ENABLED:
     CACHES ={
         'default': {

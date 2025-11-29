@@ -48,7 +48,6 @@ class ProductForm(ModelForm):
             }
         )
 
-
     def clean_name(self):
         """Валидация названия (отсутствие запрещенных слов)"""
         name = self.cleaned_data.get('name')
@@ -92,8 +91,8 @@ class ProductModeratorForm(ModelForm):
         model = Product
         fields = ("is_published",)
 
+
 class ProductAdminForm(ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-
