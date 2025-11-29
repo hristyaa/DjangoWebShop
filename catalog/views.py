@@ -7,10 +7,14 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from catalog.forms import ProductForm, ProductModeratorForm, ProductAdminForm
 from catalog.models import Contact, Product
+from catalog.services import get_products_from_cache
 
 
 class ProductListView(ListView):
     model = Product
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 
 class ProductDetailView(DetailView):
